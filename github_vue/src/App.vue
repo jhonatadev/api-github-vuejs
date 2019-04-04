@@ -8,6 +8,12 @@
         <p class="lead">Digite um nome para encontrar usuários e repositórios</p>
         <input @keyup="getUser" id="search" type="text" class="form-control" required>
       </div>
+
+      <div class="row" v-if="user.length !== 0">
+        <div class="col-md-4">
+          <Profile :user="user"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +21,7 @@
 <script>
 
 import Navbar from "./components/Navbar.vue";
+import Profile from "./components/Profile.vue";
 import axios from 'axios';
 
 export default {
@@ -33,7 +40,8 @@ export default {
     }
   },
   components: {
-    Navbar
+    Navbar,
+    Profile
   },
   methods: {
     getUser(e){
@@ -42,7 +50,7 @@ export default {
       axios.get(
         `${url}/${user}?client_id=${client_id}&client_secret=${client_secret}`
       )
-      .then(({ data }) => console.log(data))
+      .then(({ data }) => this.user = data)
     }
   }
 };
