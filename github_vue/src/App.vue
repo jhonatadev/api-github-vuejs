@@ -9,9 +9,12 @@
         <input @keyup="getUser" id="search" type="text" class="form-control" required>
       </div>
 
-      <div class="row" v-if="user.length !== 0">
+      <div class="row mt-4" v-if="user.length !== 0">
         <div class="col-md-4">
           <Profile :user="user"/>
+        </div>
+        <div class="col-md-8">
+          <Repo v-for="repo in repos" :key="repo" :repo="repo" />
         </div>
       </div>
     </div>
@@ -22,6 +25,7 @@
 
 import Navbar from "./components/Navbar.vue";
 import Profile from "./components/Profile.vue";
+import Repo from "./components/Repo.vue";
 import axios from 'axios';
 
 export default {
@@ -41,7 +45,8 @@ export default {
   },
   components: {
     Navbar,
-    Profile
+    Profile,
+    Repo
   },
   methods: {
     getUser(e){
@@ -50,7 +55,12 @@ export default {
       axios.get(
         `${url}/${user}?client_id=${client_id}&client_secret=${client_secret}`
       )
-      .then(({ data }) => this.user = data)
+      .then(({ data }) => (this.user = data));
+
+      axios.get(
+        `${url}/${user}/repos?per_page=${count}&${sort}=created:asc&client_id=${client_id}&client_secret=${client_secret}`
+      )
+      .then(({ data }) => (this.repos = data));
     }
   }
 };
