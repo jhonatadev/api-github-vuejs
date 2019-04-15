@@ -10,7 +10,7 @@
   ### E para iniciar é simples
 
 ``` bash
-# Instala as dependências
+# Instalar as dependências
 npm install
 # Executa a aplicação
 npm run serve
